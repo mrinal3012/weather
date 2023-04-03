@@ -5,8 +5,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
-
-
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -15,12 +13,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-
   // var dateString = format.format(DateTime.now());
-
-
-
 
   determinePosition() async {
     bool serviceEnabled;
@@ -41,7 +34,7 @@ class _HomePageState extends State<HomePage> {
           'Location permissions are permanently denied, we cannot request permissions.');
     }
     position = await Geolocator.getCurrentPosition();
-     getWeatherData();
+    getWeatherData();
   }
 
   Position? position;
@@ -70,74 +63,84 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return weatherMap==null ? Center(child: CircularProgressIndicator()):Scaffold(
+    return weatherMap == null
+        ? Center(child: CircularProgressIndicator())
+        : Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              title: Text("${weatherMap!["name"]}"),
+            ),
+            body: Padding(
+              padding: const EdgeInsets.only(top: 50),
+              child: Column(
+                children: [
+                  Expanded(
+                      child: Column(
+                    children: [
+                      // Text("Last update: ${Jiffy.now().jm as String}"),
+                      Text(DateFormat.yMMMMEEEEd()
+                          .format(DateTime.parse("${DateTime.now()}"))),
 
-      backgroundColor: Colors.blueGrey,
-    appBar: AppBar(
-    title: Text("${weatherMap!["name"]}"),
-    ),
-    body: Column(
-    children: [
-    Expanded(child: Column(children: [
+                      // Text( DateFormat.yMd('en_US').parse('1/10/2012');
+                      // DateFormat('Hms', 'en_US').parse('14:23:01');),
 
-      // Text("Last update: ${Jiffy.now().jm as String}"),
-      Text(DateFormat.yMMMMEEEEd().format(DateTime.parse(
-        "${DateTime.now()}"
-      ))),
+                      Text("${weatherMap!["timezone"]}"),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text("${weatherMap!["name"]}"),
+                      Text("${weatherMap!["main"]["temp"]}"),
+                      Text("${weatherMap!["main"]["temp_min"]}"),
+                      Text("${weatherMap!["main"]["temp_max"]}"),
+                      Text("${weatherMap!["main"]["pressure"]}"),
+                      Text("${weatherMap!["main"]["humidity"]}"),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text("${weatherMap!["weather"][0]["id"]}"),
+                      Text("${weatherMap!["weather"][0]["main"]}"),
+                      Text("${weatherMap!["weather"][0]["description"]}"),
+                      Text("${weatherMap!["weather"][0]["icon"]}"),
+                      Text("${weatherMap!["base"]}"),
+                      Text("${weatherMap!["visibility"]}"),
+                    ],
+                  )),
+                  Expanded(
+                      child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 4,
+                    itemBuilder: (context, index) => Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: Colors.red),
+                        height: 100,
+                        width: 150,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 20),
+                          child: Column(
 
-      // Text( DateFormat.yMd('en_US').parse('1/10/2012');
-      // DateFormat('Hms', 'en_US').parse('14:23:01');),
+                            children: [
+                              Text("${forecastMap!["cod"]}"),
+                              Text("${forecastMap!["list"][index]["dt"]}"),
+                              Text("${forecastMap!["list"][index]["main"]["temp"]}"),
+                              Text("${forecastMap!["list"][index]["weather"][0]["id"]}"),
+                              Text("${forecastMap!["list"][index]["weather"][0]["main"]}"),
+                              Text("${forecastMap!["list"][index]["weather"][0]["description"]}"),
+                              // Text("${forecastMap!["list"][index]["weather"][0]["icon"]}"),
+                              Image.network("https://openweathermap.org/img/wn/${forecastMap!["list"][index]["weather"][0]["icon"]}@2x.png"),
 
-      Text("${weatherMap!["timezone"]}"),
-      SizedBox(height: 20,),
-      Text("${weatherMap!["name"]}"),
-      Text("${weatherMap!["main"]["temp"]}"),
-      Text("${weatherMap!["main"]["temp_min"]}"),
-      Text("${weatherMap!["main"]["temp_max"]}"),
-      Text("${weatherMap!["main"]["pressure"]}"),
-      Text("${weatherMap!["main"]["humidity"]}"),
-      SizedBox(height: 20,),
-      Text("${weatherMap!["weather"][0]["id"]}"),
-      Text("${weatherMap!["weather"][0]["main"]}"),
-      Text("${weatherMap!["weather"][0]["description"]}"),
-      Text("${weatherMap!["weather"][0]["icon"]}"),
-      Text("${weatherMap!["base"]}"),
-      Text("${weatherMap!["visibility"]}"),
+                              Text(DateFormat.Hm().format(DateTime.parse("${forecastMap!["list"][index]["dt_txt"]}"))),
 
 
-
-
-
-    ],)),
-
-    Expanded(child:
-    ListView.builder(
-      scrollDirection: Axis.horizontal,
-      itemCount: 4,
-      itemBuilder: (context, index) => Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          height: 100,
-          width: 150,child: Column(children: [
-            Text("${forecastMap!["cod"]}"),
-            Text("${forecastMap!["list"][index]["dt"]}"),
-            Text("${forecastMap!["list"][index]["main"]["temp"]}"),
-
-            Text("${forecastMap!["list"][index]["weather"][0]["id"]}"),
-            Text("${forecastMap!["list"][index]["weather"][0]["main"]}"),
-            Text("${forecastMap!["list"][index]["weather"][0]["description"]}"),
-            // Text("${forecastMap!["list"][index]["weather"][0]["icon"]}"),
-          Image.network("https://openweathermap.org/img/wn/${forecastMap!["list"][index]["weather"][0]["icon"]}@2x.png"),
-
-          Text(DateFormat.Hm().format(DateTime.parse(
-              "${forecastMap!["list"][index]["dt_txt"]}"
-          ))),
-
-        ],),),
-      ) ,)
-    ),
-    ],
-    ),
-    );
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  )),
+                ],
+              ),
+            ),
+          );
   }
 }
