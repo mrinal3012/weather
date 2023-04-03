@@ -41,9 +41,7 @@ class _HomePageState extends State<HomePage> {
           'Location permissions are permanently denied, we cannot request permissions.');
     }
     position = await Geolocator.getCurrentPosition();
-    print(
-        "print the ppppppppppppppppppppppppppppppppppppp ${position!.latitude} and ${position!.longitude}");
-    getWeatherData();
+     getWeatherData();
   }
 
   Position? position;
@@ -73,6 +71,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return weatherMap==null ? Center(child: CircularProgressIndicator()):Scaffold(
+
+      backgroundColor: Colors.blueGrey,
     appBar: AppBar(
     title: Text("${weatherMap!["name"]}"),
     ),
